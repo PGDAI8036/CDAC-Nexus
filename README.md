@@ -25,3 +25,18 @@ To run the project, clone the repository and follow the installation instruction
 git clone https://github.com/CDAC-Nexus
 cd cdac-nexus
 pip install -r requirements.txt
+```
+
+Run the Streamlit application:
+```bash
+streamlit run Trial.py
+```
+
+## Contributions
+
+Each team member contributed to different aspects of the project, from backend development to frontend design and performance testing.
+
+## Acknowledgments
+Special thanks to our mentors and peers for their guidance and support throughout the project.
+
+```Feel free to customize any parts of the file to better fit your project's needs!```
