@@ -41,6 +41,10 @@ pip install -r requirements.txt
 streamlit run main.py
 ```
 
+## License 📜
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
 ## Contributions 💡
 
 Each team member contributed to different aspects of the project, from backend development to frontend design and performance testing.
