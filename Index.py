@@ -1,33 +1,34 @@
 # Importing basic libraries
 import os
 import pickle
+import pandas as pd
 
-# LlamaIndex - 0.10.62
+# LlamaIndex - 0.10.65
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core import Document, VectorStoreIndex, Settings
 
-document_path = "Main_Data.txt" # Path to the text document
+csv_path = "Main_Data.csv"  # Path to the CSV file
 
 try:
-    # Check if the document exists
-    if not os.path.exists(document_path):
-        raise FileNotFoundError(f"The document '{document_path}' does not exist.")
+    if not os.path.exists(csv_path):
+        raise FileNotFoundError(f"The file does not exist.")
 
-    # Read contents of the text document
-    with open(document_path, "r", encoding="utf-8") as file:
-        document_content = file.read()
+    df = pd.read_csv(csv_path)
 
-    docs = [Document(text=document_content)] # Convert text content into list of Document objects
+    document_content = df.to_string(index=False)
+
+    docs = [Document(text=document_content)]  # Convert text content into a list of Document objects
 
     try:
-        llm = Ollama(model="llama3.1", request_timeout=300.0) # Initialize LLM with spcific configuration
+        llm = Ollama(model="llama3.1:8b-instruct-q4_K_M", request_timeout=300.0) # Initialize LLM with spcific configuration
     except Exception as e:
         raise RuntimeError(f"Failed to initialize the language model: {e}")
 
     try:
         embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-base-en-v1.5") # Initialize embedding model for document indexing
+        # According to MTEB leaderboard, Many tasks -> Different parameters to test it
     except Exception as e:
         raise RuntimeError(f"Failed to initialize the embedding model: {e}")
 
