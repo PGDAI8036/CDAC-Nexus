@@ -2,12 +2,13 @@
 import pickle
 import streamlit as st
 from llama_index.llms.ollama import Ollama
+from llama_index.core.memory import ChatMemoryBuffer
 import base64
 
 def response_generator(stream):
     """
     Handles the streaming response from the chat engine and yields chunks of data,
-    allowing the assistant's response to be displayed progressively.
+    allowing the assistant's respose to be displayed progressively.
     """
     try:
         for chunk in stream.response_gen:
@@ -38,7 +39,7 @@ def main() -> None:
     
     # Configuring Streamlit page settings
     st.set_page_config(page_title="CDAC Nexus", page_icon="cdac_logo.png", layout="centered", initial_sidebar_state="auto", menu_items=None)
-    st.title("CDAC Insights: Your Digital Assistant 💬")
+    st.title("CDAC Nexus: Your Digital Assistant 💬")
 
     # Load and display the bot's image on the interface
     img = load_image("assets/Bot.png")
@@ -65,6 +66,9 @@ def main() -> None:
     if "index" not in st.session_state:
         st.session_state.index = load_index()
         st.session_state.activate_chat = True
+
+        # Add the initial assistant message
+        st.session_state.messages = [{"role": "assistant", "content": "Hi, I'm CDAC Nexus. How can I help you?"}]
     
     # If the chat is activated, handle the user interaction
     if st.session_state.activate_chat:
@@ -76,20 +80,23 @@ def main() -> None:
         # Initialize the chat engine
         if "chat_engine" not in st.session_state:
             try:
-                model_name = "llama3.1"
+                model_name = "llama3.1:8b-instruct-q4_K_M"
                 llm = Ollama(model=model_name, request_timeout=300.0)
 
                 # Define the system prompt to guide the chatbot's responses
                 system_prompt = (
                     """
-                    Use the following pieces of context to answer the question.
+                    Use the following pieces of context to answer the question in one to 2 sentences.
                     If you don't know the answer, just say that you don't know in a polite manner, don't try to make up an answer.
                     Use three sentences maximum and keep the answer as concise as possible.
+                    When user inclucdes words like in-depth/details in his/her prompt, answer in 3 to 4 sentences related to main keyword.
                     """
                 )
                 
+                memory = ChatMemoryBuffer(token_limit=2000)
+
                 # Initialize the chat engine with streaming capability
-                st.session_state.chat_engine = st.session_state.index.as_chat_engine(llm=llm, chat_mode="context", streaming=True, system_prompt=system_prompt)
+                st.session_state.chat_engine = st.session_state.index.as_chat_engine(llm=llm, chat_mode="context", memory=memory, streaming=True, system_prompt=system_prompt)
             except Exception as e:
                 st.error(f"An error occurred while initializing the chat engine: {e}")
 
