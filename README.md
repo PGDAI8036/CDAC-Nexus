@@ -9,7 +9,7 @@ The **CDAC Nexus** project is an intelligent chatbot designed to enhance user en
 - **Prathamesh Kale** ([GitHub](https://github.com/Prathamesh-Kale))
 - **Pratiksha Chavan** ([GitHub](https://github.com/pratikshachavan14))
 - **Shubham Shaha** ([GitHub](https://github.com/Shubham280296))
-- **Utsav** ([GitHub](https://github.com/Shubham280296))
+- **Utsav** ([GitHub](https://github.com/PGDAI8036/))
 
 ## Project Components 🛠️
 
